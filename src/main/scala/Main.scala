@@ -1,12 +1,12 @@
 import hw.json._
-import hw.combinator.CombinatorLike
+import hw.combinator.{CombinatorLike, JsonProc}
 
 object Combinators extends CombinatorLike {
 
   def key(key: String) = new JsonProc[Json,Json](json => json match {
-    case JsonDict(map) => {
-      if(map.contains(key)) List(map.get(key))
-      else Nil
+    case JsonDict(map) => map.get(JsonString(key)) match {
+      case Some(value) => List(value)
+      case None => Nil
     }
     case v => Nil
   })
